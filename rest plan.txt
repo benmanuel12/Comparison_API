@@ -1,0 +1,8 @@
+REST API Plan
+
+User can GET one of 2 representations of data
+1 for the search page containing all cards whose name includes the string submitted in the search (and possibly an option to get all cards)
+1 for the details page containing all options with the cardid that matches the cardid of the card whose page you are viewing
+
+Possibly requires POST instead
+No need to PUT or DELETE as the Java code handles the creation of data (and currently I'm doing the DELETEing by hand)
