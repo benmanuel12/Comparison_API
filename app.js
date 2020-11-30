@@ -17,8 +17,6 @@ var connectionPool = mysql.createPool({
     debug: false
 })
 
-app.get('/test', handleGetRequestTest)
-
 // Return all cards
 app.get('/cards', handleGetRequest)
 
@@ -37,18 +35,11 @@ app.get('/option/*', handleGetRequest)
 // Return all options for the given (card) id
 app.get('/cardoptions/*', handleGetRequest)
 
+// Open the server
 console.log("App listening on 8080")
 app.listen(8080)
 
-function handleGetRequestTest(request, response) {
-    try {
-        console.log("GET Recieved")
-    } catch (ex) {
-        response.status(HTTP_STATUS.NOT_FOUND);
-        response.send("{error: '" + JSON.stringify(ex) + "', url: " + request.url + "}");
-    }
-}
-
+// Parse the URL and call the correct function based on its structure
 function handleGetRequest(request, response) {
     let urlObject = url.parse(request.url, true)
 
@@ -64,9 +55,6 @@ function handleGetRequest(request, response) {
     let pathEnd = pathArray[pathArray.length - 1];
 
     try {
-        //console.log("pathBeforeEnd is " + pathBeforeEnd)
-        // console.log("pathEnd is " + pathEnd)
-        // console.log("pathEnd is type " + typeof(pathEnd))
         let regExAllDigits = new RegExp('^[0-9]+$')
 
         if (pathEnd === "cards") {
@@ -95,13 +83,13 @@ function handleGetRequest(request, response) {
         }
         if (pathBeforeEnd === "option" && regExAllDigits.test(pathEnd)) {
             console.log("Getting option with id " + pathEnd)
-            getOption()
+            getOption(response, pathEnd)
             return;
 
         }
         if (pathBeforeEnd === "cardoptions" && regExAllDigits.test(pathEnd)) {
             console.log("Getting all options for given card")
-                //getCardOptions()
+            getCardOptionsCount(response, numItems, offset, pathEnd)
             return;
         }
     } catch (ex) {
@@ -109,7 +97,7 @@ function handleGetRequest(request, response) {
         response.send("{error: '" + JSON.stringify(ex) + "', url: " + request.url + "}");
     }
 }
-
+// Queries the database for total number of cards in database
 function getAllCardsCount(response, numItems, offset) {
     var sql = "SELECT COUNT(*) FROM cards";
 
@@ -128,6 +116,7 @@ function getAllCardsCount(response, numItems, offset) {
     });
 }
 
+// Queries database for data on all cards in database
 function getAllCards(response, total, numItems, offset) {
     let sql = "SELECT * FROM cards"
 
@@ -151,7 +140,7 @@ function getAllCards(response, total, numItems, offset) {
     });
 }
 
-
+// Queries database for data on a specific card
 function getCard(response, id) {
     let sql = "SELECT * FROM cards WHERE id = " + id + ";"
 
@@ -171,6 +160,7 @@ function getCard(response, id) {
     });
 }
 
+// Queries database for total number of cards with a name containing the given string
 function searchCardsCount(response, numItems, offset, name) {
     var sql = "SELECT COUNT(*) FROM cards WHERE card_name LIKE '%" + name + "%';";
 
@@ -188,7 +178,7 @@ function searchCardsCount(response, numItems, offset, name) {
         searchCards(response, numItems, offset, name)
     });
 }
-
+// Queries the database for data on cards with a name containing the given string
 function searchCards(response, numItems, offset, name) {
     let sql = "SELECT * FROM cards WHERE card_name LIKE '%" + name + "%';";
 
@@ -211,6 +201,8 @@ function searchCards(response, numItems, offset, name) {
     });
 }
 
+
+// Queries database for total number of options in the database
 function getAllOptionsCount(response, numItems, offset) {
     var sql = "SELECT COUNT(*) FROM options";
 
@@ -229,6 +221,7 @@ function getAllOptionsCount(response, numItems, offset) {
     });
 }
 
+// Queries database for data on all options
 function getAllOptions(response, total, numItems, offset) {
     let sql = "SELECT * FROM options"
 
@@ -252,8 +245,9 @@ function getAllOptions(response, total, numItems, offset) {
     });
 }
 
+// Queries database for data on a specific option
 function getOption(response, id) {
-    let sql = "SELECT * FROM option WHERE id = " + id + ";"
+    let sql = "SELECT * FROM options WHERE id = " + id + ";"
 
     console.log(sql);
     connectionPool.query(sql, function(err, result) {
@@ -266,6 +260,51 @@ function getOption(response, id) {
         }
 
         let returnObject = { data: result }
+
+        response.json(returnObject);
+    });
+}
+
+// Queries database for total number of options for the given card id
+function getCardOptionsCount(response, numItems, offset, id) {
+    var sql = "SELECT COUNT(*) FROM options WHERE card_id = " + id + ";";
+
+    console.log(sql)
+
+    connectionPool.query(sql, function(err, result) {
+
+        if (err) {
+            response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+            response.json({ 'error': true, 'message': +err })
+            return;
+
+        }
+
+        let total = result[0]['COUNT(*)']
+
+        getCardOptions(response, total, numItems, offset, id)
+    });
+}
+
+// Queries database for data on all options for the given card id
+function getCardOptions(response, total, numItems, offset, id) {
+    let sql = "SELECT shop_name, price, link FROM options WHERE card_id = " + id + ";";
+
+    if (numItems != undefined && offset != undefined) {
+        sql += " ORDER BY id LIMIT " + numItems + " OFFSET " + offset;
+    }
+
+    connectionPool.query(sql, function(err, result) {
+
+        if (err) {
+            response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+            response.json({ 'error': true, 'message': +err })
+            return;
+
+        }
+
+        let returnObject = { total: total }
+        returnObject.data = result;
 
         response.json(returnObject);
     });
