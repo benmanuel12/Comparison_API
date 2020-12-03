@@ -49,10 +49,30 @@
         </div>
         <div id=carddetails class="row">
             <div id=cardcard>
-                a
+                <div class="card border-primary mb-3" style="width: 18rem;">
+                    <img class="card-img-top" :src="focusCard.image_url" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{focusCard.card_name}}</h5>
+                    </div>
+                </div>
             </div>
             <div id="cardoptions">
-                b
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Shop Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody v-for="option in options">
+                        <tr>
+                            <th scope="row">{{option.shop_name}}</th>
+                            <td>{{option.price}}</td>
+                            <td>{{option.link}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
@@ -79,8 +99,10 @@
         el: '#bodydiv',
         data: {
             cards: [],
+            options: [],
             searchTerm: "",
-            focusCardID: 0
+            focusCardID: 1,
+            focusCard: {}
         },
         methods: {
             searchCards: function() {
@@ -101,7 +123,21 @@
                 longSearchTerm = '/cardoptions/' + focusCardID
                 axios.get(longSearchTerm)
                     .then(function(response) {
+                        localApp.options = response.data
                         console.log(response.data)
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+            },
+            findCard: function() {
+                var localApp = this;
+                console.log("Finding card for id " + focusCardID)
+                longSearchTerm = '/card/' + focusCardID
+                axios.get(longSearchTerm)
+                    .then(function(response) {
+                        console.log(response.data)
+                        localApp.focusCard = response.data
                     })
                     .catch(function(error) {
                         console.log(error)
@@ -109,18 +145,12 @@
             },
             displayCardInfo: function() {
                 console.log("Displaying info")
-                    // fetch options
-                    // set up picture and name
-                    // set up options
-                    // flip visibility
+                findCard()
+                findOptions()
+                flipVisibility()
             },
             flipVisibility: function() {
-                console.log("HI")
-                cardDetailsDisplay = getComputedStyle(document.getElementById("carddetails")).display
                 resultDivDisplay = getComputedStyle(document.getElementById("resultdiv")).display
-                console.log(cardDetailsDisplay)
-                console.log(resultDivDisplay)
-
                 if (resultDivDisplay == "flex") {
                     document.getElementById("resultdiv").style.display = "none"
                     document.getElementById("carddetails").style.display = "grid"
