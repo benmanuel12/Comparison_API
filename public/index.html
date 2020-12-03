@@ -25,6 +25,7 @@
         <h1>Magic the Gathering Card Price Comparisons</h1>
     </div>
     <div id="bodydiv" class="container">
+        <button type="button" class="btn btn-primary" @click="flipVisibility">Flip</button>
         <div id=searchdiv class="row justify-content-center align-items-center">
             <form class="form-inline">
                 <div class="form-group" id="searchbox">
@@ -46,6 +47,15 @@
                 </div>
             </div>
         </div>
+        <div id=carddetails class="row">
+            <div id=cardcard>
+                a
+            </div>
+            <div id="cardoptions">
+                b
+            </div>
+
+        </div>
         <div id="infodivtitle" class="row justify-content-center align-items-center">
             <h3>
                 Sites Supported
@@ -60,6 +70,7 @@
                 <li class="list-group-item">Troll and Toad</li>
             </ul>
         </div>
+
     </div>
 </body>
 
@@ -68,7 +79,8 @@
         el: '#bodydiv',
         data: {
             cards: [],
-            searchTerm: ""
+            searchTerm: "",
+            focusCardID: 0
         },
         methods: {
             searchCards: function() {
@@ -78,11 +90,44 @@
                 axios.get(longSearchTerm)
                     .then(function(response) {
                         localApp.cards = response.data
-                            //console.log(localApp.cards)
                     })
                     .catch(function(error) {
                         console.log(error)
                     })
+            },
+            findOptions: function() {
+                var localApp = this;
+                console.log("Finding Options for id " + focusCardID)
+                longSearchTerm = '/cardoptions/' + focusCardID
+                axios.get(longSearchTerm)
+                    .then(function(response) {
+                        console.log(response.data)
+                    })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+            },
+            displayCardInfo: function() {
+                console.log("Displaying info")
+                    // fetch options
+                    // set up picture and name
+                    // set up options
+                    // flip visibility
+            },
+            flipVisibility: function() {
+                console.log("HI")
+                cardDetailsDisplay = getComputedStyle(document.getElementById("carddetails")).display
+                resultDivDisplay = getComputedStyle(document.getElementById("resultdiv")).display
+                console.log(cardDetailsDisplay)
+                console.log(resultDivDisplay)
+
+                if (resultDivDisplay == "flex") {
+                    document.getElementById("resultdiv").style.display = "none"
+                    document.getElementById("carddetails").style.display = "grid"
+                } else {
+                    document.getElementById("resultdiv").style.display = "flex"
+                    document.getElementById("carddetails").style.display = "none"
+                }
             }
         }
 
