@@ -26,6 +26,18 @@ body {
     padding: 30px;
 }
 
-#resultdiv {
-    background-color: #871F78;
+img {
+    float: left;
+    width: 100px;
+    height: 300px;
+    object-fit: contain;
+}
+
+.card {
+    margin: 20px;
+    padding: 5px;
+}
+
+.border-primary {
+    border-width: 3px !important;
 }
