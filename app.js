@@ -1,6 +1,7 @@
 var express = require('express')
 var url = require("url")
 
+
 require('./http_status')
 
 var app = express()
@@ -17,11 +18,13 @@ var connectionPool = mysql.createPool({
     debug: false
 })
 
+app.use(express.static('public'))
+
 // Return all cards
 app.get('/cards', handleGetRequest)
 
 // Return all cards whose name contains given string
-app.get('/cards/*', handleGetRequest)
+app.get('/searchcards/*', handleGetRequest)
 
 // Return card with given id
 app.get('/card/*', handleGetRequest)
@@ -69,7 +72,7 @@ function handleGetRequest(request, response) {
             return;
 
         }
-        if (pathBeforeEnd === "cards" && typeof(pathEnd) == "string") {
+        if (pathBeforeEnd === "searchcards" && typeof(pathEnd) == "string") {
             console.log("Getting all cards with query " + pathEnd)
             searchCardsCount(response, numItems, offset, pathEnd);
             return;
@@ -197,7 +200,12 @@ function searchCards(response, numItems, offset, name) {
 
         let returnObject = { data: result }
 
-        response.json(returnObject);
+        response.json(returnObject.data);
+        // wanted = returnObject.data[0];
+        // console.log(wanted.id)
+        // console.log(wanted.card_name)
+        // console.log(wanted.card_set_code)
+        // console.log(wanted.image_url)
     });
 }
 

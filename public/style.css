@@ -1,0 +1,31 @@
+body {
+    font-size: 16px;
+    font-family: Arial;
+}
+
+#headingdiv,
+#searchbox,
+#resultdiv,
+#infodiv,
+#footer {
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+}
+
+#headingdiv {
+    background-color: white;
+    text-align: center;
+}
+
+.formgroup {
+    margin: auto;
+}
+
+#searchbox {
+    padding: 30px;
+}
+
+#resultdiv {
+    background-color: #871F78;
+}
