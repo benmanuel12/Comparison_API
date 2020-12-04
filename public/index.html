@@ -18,6 +18,8 @@
     <!-- Axios library -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 </head>
 
 <body>
@@ -42,7 +44,10 @@
                     <img class="card-img-top" :src="card.image_url" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{card.card_name}}</h5>
-                        <a href="#" class="btn btn-primary">See prices</a>
+                        <form>
+                            <input type="text" name="hiddenID" class="hiddenID" :value="card.id">
+                            <button type=button class="btn btn-primary" @click='displayCardInfo'>See prices</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -144,10 +149,14 @@
                     })
             },
             displayCardInfo: function() {
+                var localApp = this;
                 console.log("Displaying info")
-                findCard()
-                findOptions()
-                flipVisibility()
+                localApp.focusCardId = $(this).prev().val()
+                console.log($(this).prev().val())
+                console.log(localApp.focusCardId)
+                    // findCard()
+                    // findOptions()
+                    // flipVisibility()
             },
             flipVisibility: function() {
                 resultDivDisplay = getComputedStyle(document.getElementById("resultdiv")).display
