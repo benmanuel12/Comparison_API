@@ -18,6 +18,7 @@
     <!-- Axios library -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <!-- JQuery?-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
@@ -27,7 +28,6 @@
         <h1>Magic the Gathering Card Price Comparisons</h1>
     </div>
     <div id="bodydiv" class="container">
-        <button type="button" class="btn btn-primary" @click="flipVisibility">Flip</button>
         <div id=searchdiv class="row justify-content-center align-items-center">
             <form class="form-inline">
                 <div class="form-group" id="searchbox">
@@ -39,14 +39,14 @@
             </form>
         </div>
         <div id=resultdiv class="row">
-            <div v-for="card in cards">
+            <div v-for="(card, index) in cards">
                 <div class="card border-primary mb-3" style="width: 18rem;">
                     <img class="card-img-top" :src="card.image_url" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{card.card_name}}</h5>
                         <form>
-                            <input type="text" name="hiddenID" class="hiddenID" :value="card.id">
-                            <button type=button class="btn btn-primary" @click='displayCardInfo'>See prices</button>
+                            <!-- <input type="text" name="hiddenposition" class="hiddenposition" :value="index"> -->
+                            <button type=button class="btn btn-primary" value="button" @click='displayCardInfo(index)'>See prices</button>
                         </form>
                     </div>
                 </div>
@@ -58,6 +58,7 @@
                     <img class="card-img-top" :src="focusCard.image_url" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{focusCard.card_name}}</h5>
+                        <button type=button class="btn btn-primary" @click='backFunction'>Back</button>
                     </div>
                 </div>
             </div>
@@ -106,10 +107,14 @@
             cards: [],
             options: [],
             searchTerm: "",
-            focusCardID: 1,
-            focusCard: {}
+            focusCardID: 0,
+            focusCard: {},
         },
         methods: {
+            getID: function() {
+                the_card_we_want = document.getElementById('id here')
+
+            },
             searchCards: function() {
                 var localApp = this;
                 console.log("Searching")
@@ -124,12 +129,12 @@
             },
             findOptions: function() {
                 var localApp = this;
-                console.log("Finding Options for id " + focusCardID)
-                longSearchTerm = '/cardoptions/' + focusCardID
+                console.log("Finding Options for id " + localApp.focusCardID)
+                longSearchTerm = '/cardoptions/' + localApp.focusCardID
                 axios.get(longSearchTerm)
                     .then(function(response) {
                         localApp.options = response.data
-                        console.log(response.data)
+                        console.log(JSON.stringify(response.data))
                     })
                     .catch(function(error) {
                         console.log(error)
@@ -137,36 +142,31 @@
             },
             findCard: function() {
                 var localApp = this;
-                console.log("Finding card for id " + focusCardID)
-                longSearchTerm = '/card/' + focusCardID
+                console.log("Finding card for id " + localApp.focusCardID)
+                longSearchTerm = '/card/' + localApp.focusCardID
                 axios.get(longSearchTerm)
                     .then(function(response) {
-                        console.log(response.data)
+                        console.log(JSON.stringify(response.data))
                         localApp.focusCard = response.data
                     })
                     .catch(function(error) {
                         console.log(error)
                     })
             },
-            displayCardInfo: function() {
+            displayCardInfo: function(position) {
                 var localApp = this;
                 console.log("Displaying info")
-                localApp.focusCardId = $(this).prev().val()
-                console.log($(this).prev().val())
-                console.log(localApp.focusCardId)
-                    // findCard()
-                    // findOptions()
-                    // flipVisibility()
+                alert(position)
+                localApp.focusCardID = localApp.cards[position].id
+                console.log(localApp.focusCardID)
+                localApp.findCard()
+                localApp.findOptions()
+                document.getElementById("resultdiv").style.display = "none"
+                document.getElementById("carddetails").style.display = "grid"
             },
-            flipVisibility: function() {
-                resultDivDisplay = getComputedStyle(document.getElementById("resultdiv")).display
-                if (resultDivDisplay == "flex") {
-                    document.getElementById("resultdiv").style.display = "none"
-                    document.getElementById("carddetails").style.display = "grid"
-                } else {
-                    document.getElementById("resultdiv").style.display = "flex"
-                    document.getElementById("carddetails").style.display = "none"
-                }
+            backFunction: function() {
+                document.getElementById("resultdiv").style.display = "flex"
+                document.getElementById("carddetails").style.display = "none"
             }
         }
 

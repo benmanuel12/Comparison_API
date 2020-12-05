@@ -67,7 +67,7 @@ function handleGetRequest(request, response) {
 
         }
         if (pathBeforeEnd === "card" && regExAllDigits.test(pathEnd)) {
-            console.log("Getting card with id" + pathEnd)
+            console.log("Getting card with id " + pathEnd)
             getCard(response, pathEnd);
             return;
 
@@ -159,7 +159,7 @@ function getCard(response, id) {
 
         let returnObject = { data: result }
 
-        response.json(returnObject);
+        response.json(returnObject.data[0]);
     });
 }
 
@@ -314,6 +314,6 @@ function getCardOptions(response, total, numItems, offset, id) {
         let returnObject = { total: total }
         returnObject.data = result;
 
-        response.json(returnObject);
+        response.json(returnObject.data);
     });
 }
