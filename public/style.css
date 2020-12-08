@@ -1,48 +1,56 @@
-body {
-    font-size: 16px;
-    font-family: Arial;
-}
-
-#headingdiv,
-#searchbox,
-#resultdiv,
-#infodiv,
-#footer {
-    border-radius: 5px;
-    margin: 5px;
-    padding: 5px;
-}
-
-#headingdiv {
-    background-color: white;
-    text-align: center;
-}
-
-.formgroup {
-    margin: auto;
-}
-
-#searchbox {
-    padding: 30px;
-}
-
-img {
-    float: left;
-    width: 100px;
-    height: 300px;
-    object-fit: contain;
-}
-
-.card {
-    margin: 20px;
-    padding: 5px;
-}
-
-.border-primary {
-    border-width: 3px !important;
-}
-
-#carddetails {
-    display: none;
-    grid-template-columns: 50% 50%;
-}
+ /* Makes the font larger */
+ 
+ body {
+     font-size: 16px;
+     font-family: Arial;
+ }
+ /* Makes sure the main elements don't get too close to another */
+ 
+ #headingdiv,
+ #searchbox,
+ #resultdiv,
+ #infodiv,
+ #footer {
+     margin: 5px;
+     padding: 5px;
+ }
+ /* Centers the heading on the screen */
+ 
+ #headingdiv {
+     text-align: center;
+ }
+ /* Helps to make the forms look right */
+ 
+ .formgroup {
+     margin: auto;
+ }
+ /* Pads the search bar */
+ 
+ #searchbox {
+     padding: 30px;
+ }
+ /* Tries to make the images from the database the same size. May cause minor issues as not all images are of the same ratio and style*/
+ 
+ img {
+     float: left;
+     width: 100px;
+     height: 300px;
+     object-fit: contain;
+ }
+ /* Pads out the cards on the screen for neatness */
+ 
+ .card {
+     margin: 20px;
+     padding: 5px;
+ }
+ /* Puts a border on the cards */
+ 
+ .border-primary {
+     border-width: 3px !important;
+ }
+ /* Forces the card details screen to fit horizontally */
+ 
+ #carddetails {
+     display: none;
+     grid-template-columns: 33% 66%;
+ }

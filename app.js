@@ -1,14 +1,15 @@
+// Import requirements
+
 var express = require('express')
 var url = require("url")
-
 
 require('./http_status')
 
 var app = express()
 
 var mysql = require('mysql')
-const { response } = require('express')
 
+// Create connection pool
 var connectionPool = mysql.createPool({
     connectionLimit: 1,
     host: "localhost",
@@ -201,11 +202,6 @@ function searchCards(response, numItems, offset, name) {
         let returnObject = { data: result }
 
         response.json(returnObject.data);
-        // wanted = returnObject.data[0];
-        // console.log(wanted.id)
-        // console.log(wanted.card_name)
-        // console.log(wanted.card_set_code)
-        // console.log(wanted.image_url)
     });
 }
 
@@ -308,7 +304,6 @@ function getCardOptions(response, total, numItems, offset, id) {
             response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
             response.json({ 'error': true, 'message': +err })
             return;
-
         }
 
         let returnObject = { total: total }

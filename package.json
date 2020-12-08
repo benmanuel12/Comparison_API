@@ -1,17 +1,20 @@
 {
-  "name": "card_comparison_api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "dependencies": {
-    "axios": "^0.21.0",
-    "express": "^4.17.1",
-    "mysql": "^2.18.1"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Benjamin Manuel",
-  "license": "ISC"
+    "name": "card_comparison_api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "dependencies": {
+        "axios": "^0.21.0",
+        "express": "^4.17.1",
+        "mysql": "^2.18.1",
+        "request": "^2.88.2"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "author": "Benjamin Manuel",
+    "license": "ISC"
 }
