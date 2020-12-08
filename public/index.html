@@ -70,11 +70,12 @@
                     <tbody v-for="option in options">
                         <tr>
                             <th scope="row">{{option.shop_name}}</th>
-                            <td>{{option.price}}</td>
+                            <td>£{{option.price}}</td>
                             <td><a :href=option.link>{{option.link}}</a></td>
                         </tr>
                     </tbody>
                 </table>
+                <p><strong>Disclamer:</strong> All prices here are displayed in £. Some sites scraped only display prices in $. Those sites have had the prices converted. Perfect accuracy in conversion is not guaranteed.</p>
             </div>
 
         </div>
