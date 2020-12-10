@@ -100,10 +100,19 @@
     var app = new Vue({
         el: '#bodydiv',
         data: {
+            // Array to hold search results
             cards: [],
+
+            // Array to hold option search results
             options: [],
+
+            // String to hold search input
             searchTerm: "",
+
+            // Holds the id of the card the user wants to look at
             focusCardID: 0,
+
+            // Holds the JS object of the card the user wants to look at
             focusCard: {},
         },
         methods: {

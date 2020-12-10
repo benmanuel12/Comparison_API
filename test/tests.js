@@ -2,6 +2,8 @@ var axios = require("axios");
 
 var expect = require('chai').expect;
 
+// Some Mocha/Chai/Axios tests of the API
+
 describe('#testgetCard()', function() {
     var url = "http://localhost:8080/card/1"
 
